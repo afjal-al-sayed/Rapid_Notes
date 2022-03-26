@@ -1,4 +1,4 @@
-package com.dotescapesoftwarelab.di
+package com.dotescapesoftwarelab.rapidnotes.di
 
 import android.app.Application
 import androidx.room.Room
