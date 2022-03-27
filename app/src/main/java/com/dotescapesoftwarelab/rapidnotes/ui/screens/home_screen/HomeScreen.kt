@@ -9,8 +9,10 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -43,9 +45,7 @@ fun HomeScreen(
                         viewModel.onEvent(HomeScreenEvent.OnUndoNoteEvent)
                     }
                 }
-                is UiEvent.NavigateTo -> {
-                    // TODO: 26-Mar-22
-                }
+                else -> Unit
             }
         }
     }
@@ -80,11 +80,28 @@ fun HomeScreen(
                     )
                 )
             }
+            if(notes.isEmpty()){
+                item{
+                    Text(
+                        text = "You have no notes",
+                        style = TextStyle(
+                            fontSize = 20.sp,
+                            color = MaterialTheme.colors.onBackground,
+                            textAlign = TextAlign.Center
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    )
+                }
+            }
             items(notes){ note ->
                 NoteItem(
                     note = note,
                     onDeleteClick = {
                         viewModel.onEvent(HomeScreenEvent.OnNoteDeleteEvent(note))
+                    },
+                    onItemClick = {
+                        navController.navigate(Screen.AddEditNote.route + "?noteId=${note.id}&noteColor=${note.color}")
                     }
                 )
                 /*Column{

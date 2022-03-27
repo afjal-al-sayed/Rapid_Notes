@@ -42,11 +42,28 @@ import kotlinx.coroutines.launch
 @Composable
 fun AddEditNoteScreen(
     navController: NavHostController,
-    viewModel: AddEditNoteViewModel = hiltViewModel()
+    viewModel: AddEditNoteViewModel = hiltViewModel(),
+    noteColor: Int
 ) {
 
     val scaffoldState = rememberScaffoldState()
     val context = LocalContext.current
+
+    val coroutineScope = rememberCoroutineScope()
+    val titleTextStyle = TextStyle(
+        fontSize = 24.sp,
+        fontWeight = FontWeight.Medium
+    )
+    val noteTextStyle = TextStyle(
+        fontSize = 16.sp,
+        fontWeight = FontWeight.Normal
+    )
+    val focusManager = LocalFocusManager.current
+    val backgroundAnimatable = remember{
+        Animatable(
+            if(noteColor != 0) Color(noteColor) else viewModel.backgroundColor
+        )
+    }
 
     LaunchedEffect(true){
         viewModel.uiEvent.collect { event ->
@@ -66,22 +83,6 @@ fun AddEditNoteScreen(
                 else -> Unit
             }
         }
-    }
-
-    val coroutineScope = rememberCoroutineScope()
-    val titleTextStyle = TextStyle(
-        fontSize = 24.sp,
-        fontWeight = FontWeight.Medium
-    )
-    val noteTextStyle = TextStyle(
-        fontSize = 16.sp,
-        fontWeight = FontWeight.Normal
-    )
-    val focusManager = LocalFocusManager.current
-    val backgroundAnimatable = remember{
-        Animatable(
-            viewModel.backgroundColor
-        )
     }
 
     Scaffold(

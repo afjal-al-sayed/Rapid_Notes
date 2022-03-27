@@ -25,10 +25,12 @@ import com.dotescapesoftwarelab.rapidnotes.domain.model.Note
 @Composable
 fun NoteItem(
     note: Note,
-    onDeleteClick: () -> Unit
+    onDeleteClick: () -> Unit,
+    onItemClick: () -> Unit
 ) {
 
     val cornerRadius = 8.dp
+    val contentColor = Color.Black
 
     Box(
         modifier = Modifier
@@ -37,11 +39,11 @@ fun NoteItem(
             .background(Color(note.color))
             .border(
                 width = 1.dp,
-                color = Color.Black,
+                color = Color.DarkGray,
                 shape = RoundedCornerShape(cornerRadius)
             )
             .clickable {
-                // TODO: 27-Mar-22
+                onItemClick()
             }
             .padding(16.dp)
     ){
@@ -55,7 +57,8 @@ fun NoteItem(
                     text = note.title,
                     style = TextStyle(
                         fontSize = 20.sp,
-                        fontWeight = FontWeight.Medium
+                        fontWeight = FontWeight.Medium,
+                        color = contentColor
                     ),
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
@@ -69,7 +72,8 @@ fun NoteItem(
                     text = note.content,
                     style = TextStyle(
                         fontSize = 16.sp,
-                        fontWeight = FontWeight.Normal
+                        fontWeight = FontWeight.Normal,
+                        color = contentColor
                     ),
                     maxLines = 5,
                     overflow = TextOverflow.Ellipsis
@@ -83,7 +87,8 @@ fun NoteItem(
         ) {
             Icon(
                 imageVector = Icons.Default.Delete,
-                contentDescription = "Delete Note"
+                contentDescription = "Delete Note",
+                tint = contentColor
             )
         }
     }

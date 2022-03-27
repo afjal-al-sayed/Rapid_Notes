@@ -1,5 +1,7 @@
 package com.dotescapesoftwarelab.rapidnotes.ui.utils
 
+import androidx.compose.ui.graphics.Color
+
 sealed class UiEvent{
     data class ShowSnackBar(
         val message: String,

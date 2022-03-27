@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dotescapesoftwarelab.rapidnotes.domain.model.Note
@@ -20,7 +21,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AddEditNoteViewModel @Inject constructor(
-    val noteRepository: NoteRepository
+    val noteRepository: NoteRepository,
+    savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
     var title by mutableStateOf("")
@@ -37,6 +39,21 @@ class AddEditNoteViewModel @Inject constructor(
     val uiEvent = _uiEvent.receiveAsFlow()
     private var noteId: Int? = null
 
+    init {
+        savedStateHandle.get<Int>("noteId").let { id ->
+            if(id != -1){
+                noteId = id
+                viewModelScope.launch {
+                    noteRepository.getNoteById(noteId!!)?.also { note ->
+                        title = note.title
+                        content = note.content
+                        backgroundColor = Color(note.color)
+                        updateHintState()
+                    }
+                }
+            }
+        }
+    }
 
     fun onEvent(event: AddEditNoteEvent){
         when(event){
