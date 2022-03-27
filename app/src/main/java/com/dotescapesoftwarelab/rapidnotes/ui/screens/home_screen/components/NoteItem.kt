@@ -25,7 +25,7 @@ import com.dotescapesoftwarelab.rapidnotes.domain.model.Note
 @Composable
 fun NoteItem(
     note: Note,
-    onDeleteClick: () -> Unit = {}
+    onDeleteClick: () -> Unit
 ) {
 
     val cornerRadius = 8.dp
@@ -40,7 +40,9 @@ fun NoteItem(
                 color = Color.Black,
                 shape = RoundedCornerShape(cornerRadius)
             )
-            .clickable { }
+            .clickable {
+                // TODO: 27-Mar-22
+            }
             .padding(16.dp)
     ){
         Column(
@@ -75,7 +77,7 @@ fun NoteItem(
             }
         }
         IconButton(
-            onClick = { /*TODO*/ },
+            onClick = onDeleteClick,
             modifier = Modifier
                 .align(Alignment.BottomEnd)
         ) {

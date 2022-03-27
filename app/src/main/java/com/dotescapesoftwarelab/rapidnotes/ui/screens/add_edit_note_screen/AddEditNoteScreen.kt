@@ -1,5 +1,6 @@
 package com.dotescapesoftwarelab.rapidnotes.ui.screens.add_edit_note_screen
 
+import android.widget.Toast
 import androidx.compose.animation.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -21,6 +22,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
@@ -28,6 +30,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.dotescapesoftwarelab.rapidnotes.R
 import com.dotescapesoftwarelab.rapidnotes.domain.model.Note
 import com.dotescapesoftwarelab.rapidnotes.ui.screens.add_edit_note_screen.components.TransientTextField
@@ -38,10 +41,12 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun AddEditNoteScreen(
+    navController: NavHostController,
     viewModel: AddEditNoteViewModel = hiltViewModel()
 ) {
 
     val scaffoldState = rememberScaffoldState()
+    val context = LocalContext.current
 
     LaunchedEffect(true){
         viewModel.uiEvent.collect { event ->
@@ -52,9 +57,13 @@ fun AddEditNoteScreen(
                         actionLabel = event.action
                     )
                 }
-                is UiEvent.NavigateTo -> {
-                    // TODO: 26-Mar-22
+                is UiEvent.NavigateUp -> {
+                    navController.popBackStack()
                 }
+                is UiEvent.ShowToast -> {
+                    Toast.makeText(context, event.message, Toast.LENGTH_SHORT).show()
+                }
+                else -> Unit
             }
         }
     }

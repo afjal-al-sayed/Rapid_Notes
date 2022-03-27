@@ -13,6 +13,7 @@ import com.dotescapesoftwarelab.rapidnotes.ui.theme.LightGreen
 import com.dotescapesoftwarelab.rapidnotes.ui.utils.UiEvent
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -70,7 +71,9 @@ class AddEditNoteViewModel @Inject constructor(
                 id = noteId
             )
             noteRepository.insertNote(note)
-            showSnackBar("Successful")
+            sendUiEvent(UiEvent.ShowToast(message = "Note saved successfully."))
+//            delay(500L)
+            sendUiEvent(UiEvent.NavigateUp)
         }
     }
 
